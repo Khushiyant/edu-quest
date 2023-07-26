@@ -1,4 +1,4 @@
-import openai_summarize
+import utils.openai_summarize as openai_summarize
 import streamlit as st
 import pdfplumber
 import json
@@ -16,17 +16,20 @@ hide_default_format = """
 st.markdown(hide_default_format, unsafe_allow_html=True)
 OpenAI_Key = st.secrets["OPENAI_KEY"]
 
+
 def summarizer(text):
     openai_summarizer = openai_summarize.OpenAISummarize(OpenAI_Key)
     text = text
     summary = openai_summarizer.summarize_text(text)
     return summary
 
+
 def main():
-    
+
     st.title('Text summarizer')
 
-    Option = st.selectbox("Choose the format", ('Text Input', 'Upload PDF', 'Web Article'), index=2)
+    Option = st.selectbox("Choose the format",
+                          ('Text Input', 'Upload PDF', 'Web Article'), index=2)
 
     if Option == 'Text Input':
         txt = st.text_area('Text to summarize', '')
@@ -36,10 +39,13 @@ def main():
                 st.success("Successfully summarized!")
                 st.write(summarized_text)
                 with st.expander("Translate"):
-                    to_lang = st.selectbox("Select the language", languages.values())
-                    dest = list(languages.keys())[list(languages.values()).index(to_lang)]
+                    to_lang = st.selectbox(
+                        "Select the language", languages.values())
+                    dest = list(languages.keys())[
+                        list(languages.values()).index(to_lang)]
                     st.write("language: ", dest)
-                    st.text_area("Translated Text", itrans(summarized_text, to_lang = dest))
+                    st.text_area("Translated Text", itrans(
+                        summarized_text, to_lang=dest))
 
     elif Option == 'Upload PDF':
         uploaded_file = st.file_uploader("Choose a file")
@@ -50,15 +56,15 @@ def main():
                     for page in pdf.pages:
                         fulltext += page.extract_text()
                     summarized_text = summarizer(fulltext)
-                    
+
                     if summarized_text:
                         st.success("Successfully summarized!")
                         st.write(summarized_text)
 
-            except:
+            except BaseException:
                 st.error("Something went wrong!")
 
-    elif Option == 'Web Article':   
+    elif Option == 'Web Article':
         url = st.text_input("URL")
         if url:
             res = requests.get(url)
@@ -72,7 +78,7 @@ def main():
                 'header',
                 'html',
                 'meta',
-                'head', 
+                'head',
                 'input',
                 'script',
                 'style',
@@ -87,11 +93,10 @@ def main():
 
             fulltext = output.strip()
             summarized_text = summarizer(fulltext)
-            
+
             if summarized_text:
                 st.success("Successfully summarized!")
                 st.write(summarized_text)
-            
 
 
 if __name__ == "__main__":

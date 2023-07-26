@@ -10,6 +10,7 @@ hide_default_format = """
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
 
+
 def semantic(txt):
     if txt is not None:
         st.markdown(f"[View file]({txt})")

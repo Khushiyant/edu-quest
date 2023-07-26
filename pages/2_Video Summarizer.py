@@ -1,7 +1,7 @@
 import openai
 from streamlit_pills import pills
 import urllib.parse as urlparse
-import streamlit as st 
+import streamlit as st
 from googleapiclient.discovery import build
 from youtube_transcript_api import YouTubeTranscriptApi
 
@@ -13,19 +13,20 @@ hide_default_format = """
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
 
+
 @st.cache_data
 def get_keywords_description(keywords):
 
     response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt="provide me a small description in markdown for each of the following " + keywords,
-    temperature=0.7,
-    max_tokens=256,
-    top_p=1,
-    frequency_penalty=0,
-    presence_penalty=0
+        model="text-davinci-003",
+        prompt="provide me a small description in markdown for each of the following " + keywords,
+        temperature=0.7,
+        max_tokens=256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
     )
-    
+
     description = response["choices"][0]["text"]
     return description
 
@@ -34,13 +35,13 @@ def get_keywords_description(keywords):
 def get_keywords(transcript):
 
     response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt="Extract important keywords mentioned in the following transcript: " + transcript,
-    temperature=0.7,
-    max_tokens=256,
-    top_p=1,
-    frequency_penalty=0,
-    presence_penalty=0
+        model="text-davinci-003",
+        prompt="Extract important keywords mentioned in the following transcript: " + transcript,
+        temperature=0.7,
+        max_tokens=256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
     )
 
     keywords = response["choices"][0]["text"]
@@ -51,33 +52,35 @@ def get_keywords(transcript):
 def generateImage(imagePrompt):
     try:
         response = openai.Image.create(
-        prompt= imagePrompt,
-        n=1,
-        size="256x256"
+            prompt=imagePrompt,
+            n=1,
+            size="256x256"
         )
 
         image_url = response['data'][0]['url']
 
         return image_url
 
-    except:
+    except BaseException:
         return ""
+
 
 @st.cache_data
 def generatesummary(transcript):
 
     response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt="Write a summary with max of 300 words in markdown format for the following transcript: " + transcript,
-    temperature=0.5,
-    max_tokens=300,
-    top_p=1.0,
-    frequency_penalty=0.0,
-    presence_penalty=0.0
+        model="text-davinci-003",
+        prompt="Write a summary with max of 300 words in markdown format for the following transcript: " + transcript,
+        temperature=0.5,
+        max_tokens=300,
+        top_p=1.0,
+        frequency_penalty=0.0,
+        presence_penalty=0.0
     )
 
     sum = response["choices"][0]["text"]
     return sum
+
 
 @st.cache_data
 def get_transcript(video_id):
@@ -86,11 +89,10 @@ def get_transcript(video_id):
         transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
         for segment in transcript_list:
             transcript += segment['text'] + " "
-    except:
+    except BaseException:
         transcript = "Transcript not available for this video."
     return transcript
 
-import urllib.parse as urlparse
 
 def get_videos():
     yt_api_key = st.secrets["yt_api_key"]
@@ -100,9 +102,9 @@ def get_videos():
 
     url_data = urlparse.urlparse(video_url)
     query = urlparse.parse_qs(url_data.query)
-    
+
     if "v" not in query:
-        return []  
+        return []
 
     video_id = query["v"][0]
     request = youtube.videos().list(
@@ -130,7 +132,7 @@ def main():
 
         transcript = get_transcript(video["id"])
 
-        if transcript ==  "Transcript not available for this video.":
+        if transcript == "Transcript not available for this video.":
             continue
 
         with st.expander(video["title"], expanded=False):
@@ -165,6 +167,7 @@ def main():
                 st.video(url)
                 st.header("Bytes")
                 st.write(get_keywords_description(keywords))
+
 
 if __name__ == '__main__':
     main()

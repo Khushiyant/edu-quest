@@ -10,6 +10,7 @@ hide_default_format = """
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
 
+
 def generate_query(query):
 
     response = openai.Completion.create(
@@ -36,11 +37,14 @@ def main():
             ['Notes', 'Questions'])
 
         if option == 'Notes':
-            response = generate_query(f"Generate notes on the topic: {text_input}")
+            response = generate_query(
+                f"Generate notes on the topic: {text_input}")
             st.write(response)
         elif option == 'Questions':
-            response = generate_query(f"Generate list of questions on the topic: {text_input}")
+            response = generate_query(
+                f"Generate list of questions on the topic: {text_input}")
             st.write(response)
+
 
 if __name__ == '__main__':
     main()
