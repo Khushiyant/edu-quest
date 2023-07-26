@@ -5,7 +5,7 @@ import json
 import requests
 from bs4 import BeautifulSoup
 from itranslate import itranslate as itrans
-from languages import languages
+from utils.languages import languages
 
 hide_default_format = """
        <style>
