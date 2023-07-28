@@ -38,7 +38,7 @@ class OpenAISummarize(object):
     def summarize_text(self, text, max_chunk_size=500,
                        max_combined_summary_size=4000):
         openai.api_key = self.openai_key
-        model_engine = "text-davinci-003"
+        model_engine = "gpt-3.5-turbo"
         prompt_template = "{}\n\nTl;dr (max 200 words)"
 
         def recursive_summarize(text):

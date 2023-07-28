@@ -6,7 +6,7 @@ import streamlit as st
 def create_content(transcript):
 
     response = openai.Completion.create(
-        model="text-davinci-003",
+        model="gpt-3.5-turbo",
         prompt=f"Create a summary in markdown format for the given transcript\n{transcript}\n",
         temperature=0.7,
         max_tokens=600,
