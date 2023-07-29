@@ -18,7 +18,7 @@ st.markdown(hide_default_format, unsafe_allow_html=True)
 def get_keywords_description(keywords):
 
     response = openai.Completion.create(
-        model="text-davinci-003",
+        model="gpt-3.5-turbo",
         prompt="provide me a small description in markdown for each of the following " + keywords,
         temperature=0.7,
         max_tokens=256,
@@ -35,7 +35,7 @@ def get_keywords_description(keywords):
 def get_keywords(transcript):
 
     response = openai.Completion.create(
-        model="text-davinci-003",
+        model="gpt-3.5-turbo",
         prompt="Extract important keywords mentioned in the following transcript: " + transcript,
         temperature=0.7,
         max_tokens=256,
@@ -69,7 +69,7 @@ def generateImage(imagePrompt):
 def generatesummary(transcript):
 
     response = openai.Completion.create(
-        model="text-davinci-003",
+        model="gpt-3.5-turbo",
         prompt="Write a summary with max of 300 words in markdown format for the following transcript: " + transcript,
         temperature=0.5,
         max_tokens=300,

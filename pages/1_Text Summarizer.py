@@ -1,7 +1,6 @@
 import utils.openai_summarize as openai_summarize
 import streamlit as st
 import pdfplumber
-import json
 import requests
 from bs4 import BeautifulSoup
 from itranslate import itranslate as itrans
