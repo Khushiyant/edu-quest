@@ -45,7 +45,7 @@ def main():
         except BaseException:
             summary = generate_query(
                 f"Generate summary on the topic: {text_input}")
-            
+
         if option == 'Notes':
             response = summary
             st.write(response)
